@@ -86,7 +86,7 @@ function generateOverflowButton() {
 
 function removeOverflowButton() {
   const breadcrumbsOverflow = document.querySelector(
-    ".jenkins-breadcrumbs__list-item .jenkins_button",
+    ".jenkins-breadcrumbs__list-item .jenkins-button",
   );
 
   if (breadcrumbsOverflow) {
