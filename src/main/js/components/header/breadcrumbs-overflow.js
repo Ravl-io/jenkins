@@ -1,5 +1,6 @@
 import Utils from "@/components/dropdowns/utils";
 import { createElementFromHtml } from "@/util/dom";
+import behaviorShim from "@/util/behavior-shim";
 
 export default function computeBreadcrumbs() {
   document
@@ -34,26 +35,18 @@ export default function computeBreadcrumbs() {
   Utils.generateDropdown(
     breadcrumbsOverflow,
     (instance) => {
-      const mappedItems = items.map((e) => {
-        let href = e.querySelector("a");
-        let tooltip;
-        if (href) {
-          href = href.href;
-        }
-        if (e.textContent.length > 26) {
-          tooltip = e.textContent;
-        }
+      const overflowContent = document.createElement("div");
+      overflowContent.classList.add("jenkins-breadcrumbs__overflow-list");
 
-        return {
-          type: "link",
-          clazz: "jenkins-breadcrumbs__overflow-item",
-          label: e.textContent,
-          url: href,
-          tooltip,
-        };
+      items.forEach((item) => {
+        const clonedItem = item.cloneNode(true);
+        clonedItem.classList.remove("jenkins-hidden");
+        clonedItem.classList.add("jenkins-breadcrumbs__overflow-item");
+        overflowContent.appendChild(clonedItem);
       });
 
-      instance.setContent(Utils.generateDropdownItems(mappedItems));
+      instance.setContent(overflowContent);
+      behaviorShim.applySubtree(overflowContent);
     },
     true,
     {
@@ -93,7 +86,7 @@ function generateOverflowButton() {
 
 function removeOverflowButton() {
   const breadcrumbsOverflow = document.querySelector(
-    ".jenkins-breadcrumbs__list-item .jenkins-button",
+    ".jenkins-breadcrumbs__list-item .jenkins_button",
   );
 
   if (breadcrumbsOverflow) {
