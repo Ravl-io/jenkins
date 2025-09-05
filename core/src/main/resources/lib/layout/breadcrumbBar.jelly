@@ -39,13 +39,14 @@ THE SOFTWARE.
     <ol class="jenkins-breadcrumbs__list" id="breadcrumbs">
       <j:forEach var="anc" items="${request2.ancestors}" indexVar="index">
         <j:if test="${h.isModel(anc.object) and anc.prev.url!=anc.url}">
-          <j:set var="mode" value="breadcrumbs" />
+          <j:set var="model" value="${anc.object}" />
+          <j:set var="hasMenu" value="${h.isModelWithContextMenu(model)}" />
 
-          <j:if test="${anc.object != app}">
-            <l:breadcrumb title="${anc.object.displayName}"
+          <j:if test="${model != app}">
+            <l:breadcrumb title="${model.displayName}"
                           href="${anc.url}/"
-                          hasMenu="${h.isModelWithContextMenu(anc.object)}"
-                          hasChildrenMenu="${h.isModelWithChildren(anc.object)}" />
+                          hasMenu="${hasMenu}"
+                          hasChildrenMenu="${h.isModelWithChildren(model)}" />
           </j:if>
         </j:if>
       </j:forEach>
